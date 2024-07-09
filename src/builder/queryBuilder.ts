@@ -11,18 +11,18 @@ export class queryBuilder<T> {
 
   search(searchAbleFields: string[]) {
     let searchTerm = ' ';
-    if (this.query?.searchTerm) {
+    if (this?.query?.searchTerm) {
       searchTerm = this.query?.searchTerm as string;
+      this.modelQuery = this.modelQuery.find({
+        $or: searchAbleFields.map(
+          (fields) =>
+            ({
+              [fields]: { $regex: searchTerm, $options: 'i' },
+            }) as FilterQuery<T>,
+        ),
+      });
     }
 
-    this.modelQuery = this.modelQuery.find({
-      $or: searchAbleFields.map(
-        (fields) =>
-          ({
-            [fields]: { $regex: searchTerm, $options: 'i' },
-          }) as FilterQuery<T>,
-      ),
-    });
     return this;
   }
 
@@ -43,12 +43,11 @@ export class queryBuilder<T> {
       sortBy = this.query?.sortBy as string;
     }
     this.modelQuery = this.modelQuery.sort(sortBy);
-    return this
+    return this;
   }
 
   fields() {
-    const fields =
-      (this.query?.fields as string)?.split(',')?.join(' ') || '';
+    const fields = (this.query?.fields as string)?.split(',')?.join(' ') || '';
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
@@ -56,7 +55,7 @@ export class queryBuilder<T> {
     const queryObj = { ...this.query };
     const excludeFields = ['searchTerm', 'limit', 'page', 'sortBy', 'fields'];
     excludeFields.forEach((e) => delete queryObj[e]);
-    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>)
-    return this ;
+    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+    return this;
   }
 }

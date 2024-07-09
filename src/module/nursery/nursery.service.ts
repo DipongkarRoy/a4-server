@@ -1,5 +1,5 @@
 import { queryBuilder } from '../../builder/queryBuilder';
-//import { searchAbleFields } from './nursery.constant';
+import { searchAbleFields } from './nursery.constant';
 import { TNursery } from './nursery.interface';
 import { NuseryModel } from './nursery.model';
 
@@ -10,7 +10,7 @@ const createNurseryDb = async (payload: TNursery) => {
 
 const getAllNurseriesDb = async (query: Record<string, unknown>) => {
   const nurseryQuery = new queryBuilder(query, NuseryModel.find())
-    //.search(searchAbleFields)
+    .search(searchAbleFields)
     .paginate()
     .sort()
     .fields()

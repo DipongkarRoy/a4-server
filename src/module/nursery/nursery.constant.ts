@@ -1,1 +1,1 @@
-export const searchAbleFields = ['brand',"ratting"]
+export const searchAbleFields = ['brand','price','title']
